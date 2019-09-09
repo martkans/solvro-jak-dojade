@@ -3,6 +3,7 @@ package com.martkans.solvrojakdojade.bootstrap;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.martkans.solvrojakdojade.DTOs.GraphDTO;
+import com.martkans.solvrojakdojade.mappers.LinkMapper;
 import com.martkans.solvrojakdojade.mappers.StopMapper;
 import com.martkans.solvrojakdojade.repositories.LinkRepository;
 import com.martkans.solvrojakdojade.repositories.StopRepository;
@@ -23,12 +24,13 @@ public class DataLoader implements CommandLineRunner {
     private final StopRepository stopRepository;
 
     private final StopMapper stopMapper;
+    private final LinkMapper linkMapper;
 
-
-    public DataLoader(LinkRepository linkRepository, StopRepository stopRepository, StopMapper stopMapper) {
+    public DataLoader(LinkRepository linkRepository, StopRepository stopRepository, StopMapper stopMapper, LinkMapper linkMapper) {
         this.linkRepository = linkRepository;
         this.stopRepository = stopRepository;
         this.stopMapper = stopMapper;
+        this.linkMapper = linkMapper;
     }
 
     @Override
@@ -46,6 +48,11 @@ public class DataLoader implements CommandLineRunner {
                     .stream()
                     .map(stopMapper::stopDtoToStop)
                     .forEach(stopRepository::save);
+
+            graphDTO.getLinks()
+                    .stream()
+                    .map(linkMapper::linkDtoToLink)
+                    .forEach(linkRepository::save);
 
         } catch (IOException e){
             log.debug("Unable to load graph: " + e.getMessage());
