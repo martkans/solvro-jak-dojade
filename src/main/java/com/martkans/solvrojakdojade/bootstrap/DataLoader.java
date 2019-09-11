@@ -49,10 +49,14 @@ public class DataLoader implements CommandLineRunner {
                     .map(stopMapper::stopDtoToStop)
                     .forEach(stopRepository::save);
 
+            log.debug("Stops saved!");
+
             graphDTO.getLinks()
                     .stream()
                     .map(linkMapper::linkDtoToLink)
                     .forEach(linkRepository::save);
+
+            log.debug("Links saved!");
 
         } catch (IOException e){
             log.debug("Unable to load graph: " + e.getMessage());
