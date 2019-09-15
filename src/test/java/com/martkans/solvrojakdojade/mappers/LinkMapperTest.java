@@ -12,6 +12,7 @@ import org.mockito.MockitoAnnotations;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
 public class LinkMapperTest {
@@ -58,7 +59,7 @@ public class LinkMapperTest {
         Link link = linkMapper.linkDtoToLink(linkDTO);
 
         assertEquals(DISTANCE, link.getDistance());
-        assertEquals(SOURCE_ID, link.getSource().getId());
-        assertEquals(TARGET_ID, link.getTarget().getId());
+        assertTrue(link.getStops().contains(target));
+        assertTrue(link.getStops().contains(source));
     }
 }

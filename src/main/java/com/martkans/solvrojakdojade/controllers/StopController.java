@@ -1,6 +1,7 @@
 package com.martkans.solvrojakdojade.controllers;
 
-import com.martkans.solvrojakdojade.DTOs.StopDTO;
+import com.martkans.solvrojakdojade.DTOs.PathDTO;
+import com.martkans.solvrojakdojade.DTOs.StopRestDTO;
 import com.martkans.solvrojakdojade.services.StopService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,7 +21,13 @@ public class StopController {
 
     @GetMapping("stops")
     @ResponseStatus(HttpStatus.OK)
-    public List<StopDTO> getAllStops(){
+    public List<StopRestDTO> getAllStops(){
         return stopService.getAllStops();
+    }
+
+    @GetMapping("path")
+    @ResponseStatus(HttpStatus.OK)
+    public PathDTO getPathBetweenStops(){
+        return new PathDTO();
     }
 }

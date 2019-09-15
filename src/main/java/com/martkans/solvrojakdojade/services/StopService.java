@@ -1,10 +1,10 @@
 package com.martkans.solvrojakdojade.services;
 
-import com.martkans.solvrojakdojade.DTOs.StopDTO;
+import com.martkans.solvrojakdojade.DTOs.StopRestDTO;
 
 import java.util.List;
 
 public interface StopService {
 
-    List<StopDTO> getAllStops();
+    List<StopRestDTO> getAllStops();
 }

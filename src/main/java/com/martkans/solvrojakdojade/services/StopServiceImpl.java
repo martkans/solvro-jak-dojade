@@ -1,6 +1,6 @@
 package com.martkans.solvrojakdojade.services;
 
-import com.martkans.solvrojakdojade.DTOs.StopDTO;
+import com.martkans.solvrojakdojade.DTOs.StopRestDTO;
 import com.martkans.solvrojakdojade.mappers.StopMapper;
 import com.martkans.solvrojakdojade.repositories.StopRepository;
 import org.springframework.stereotype.Service;
@@ -20,11 +20,11 @@ public class StopServiceImpl implements StopService {
     }
 
     @Override
-    public List<StopDTO> getAllStops() {
+    public List<StopRestDTO> getAllStops() {
         return stopRepository
                 .findAll()
                 .stream()
-                .map(stopMapper::stopToStopDto)
+                .map(stopMapper::stopToStopRestDto)
                 .collect(Collectors.toList());
     }
 }

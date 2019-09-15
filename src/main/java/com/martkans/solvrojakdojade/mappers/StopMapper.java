@@ -1,6 +1,7 @@
 package com.martkans.solvrojakdojade.mappers;
 
 import com.martkans.solvrojakdojade.DTOs.StopDTO;
+import com.martkans.solvrojakdojade.DTOs.StopRestDTO;
 import com.martkans.solvrojakdojade.domain.Stop;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -14,5 +15,6 @@ public interface StopMapper {
     @Mapping(target = "links", ignore = true)
     Stop stopDtoToStop(StopDTO stopDTO);
 
-    StopDTO stopToStopDto(Stop stop);
+    @Mapping(source = "stopName", target = "name")
+    StopRestDTO stopToStopRestDto(Stop stop);
 }

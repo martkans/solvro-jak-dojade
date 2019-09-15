@@ -1,6 +1,6 @@
 package com.martkans.solvrojakdojade.controllers;
 
-import com.martkans.solvrojakdojade.DTOs.StopDTO;
+import com.martkans.solvrojakdojade.DTOs.StopRestDTO;
 import com.martkans.solvrojakdojade.services.StopService;
 import org.junit.Before;
 import org.junit.Test;
@@ -42,10 +42,10 @@ public class StopControllerTest {
     @Test
     public void getAllStops() throws Exception {
 
-        StopDTO stopDTO1 = new StopDTO();
-        StopDTO stopDTO2 = new StopDTO();
+        StopRestDTO stopDTO1 = new StopRestDTO();
+        StopRestDTO stopDTO2 = new StopRestDTO();
 
-        List<StopDTO> stopDTOs = Arrays.asList(stopDTO1, stopDTO2);
+        List<StopRestDTO> stopDTOs = Arrays.asList(stopDTO1, stopDTO2);
 
         when(stopService.getAllStops())
                 .thenReturn(stopDTOs);

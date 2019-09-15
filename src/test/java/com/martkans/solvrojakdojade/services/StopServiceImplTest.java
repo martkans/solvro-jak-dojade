@@ -1,6 +1,6 @@
 package com.martkans.solvrojakdojade.services;
 
-import com.martkans.solvrojakdojade.DTOs.StopDTO;
+import com.martkans.solvrojakdojade.DTOs.StopRestDTO;
 import com.martkans.solvrojakdojade.domain.Stop;
 import com.martkans.solvrojakdojade.mappers.StopMapper;
 import com.martkans.solvrojakdojade.mappers.StopMapperImpl;
@@ -45,7 +45,7 @@ public class StopServiceImplTest {
         when(stopRepository.findAll())
                 .thenReturn(stops);
 
-        List<StopDTO> stopDTOS = stopService.getAllStops();
+        List<StopRestDTO> stopDTOS = stopService.getAllStops();
 
         assertEquals(stops.size(), stopDTOS.size());
 
