@@ -22,10 +22,12 @@ public class LinkMapper {
         if(stopRepository.findById(linkDTO.getSource()).isPresent()){
             link.getStops().add(stopRepository.findById(linkDTO.getSource()).get());
         }
+        //exception handling
 
         if(stopRepository.findById(linkDTO.getTarget()).isPresent()){
             link.getStops().add(stopRepository.findById(linkDTO.getTarget()).get());
         }
+        //exception handling
 
         return link;
     }
