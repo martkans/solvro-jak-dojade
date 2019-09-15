@@ -4,10 +4,12 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Data
-@EqualsAndHashCode(exclude = {"source", "target"})
+@EqualsAndHashCode(exclude = {"stops"})
 public class Link {
 
     @Id
@@ -16,9 +18,8 @@ public class Link {
 
     private Integer distance;
 
-    @ManyToOne
-    private Stop source;
-
-    @ManyToOne
-    private Stop target;
+    @ManyToMany
+    @JoinTable(name = "link_stop", joinColumns = @JoinColumn(name = "stop_id"),
+            inverseJoinColumns = @JoinColumn(name = "link_id"))
+    private Set<Stop> stops = new HashSet<>();
 }

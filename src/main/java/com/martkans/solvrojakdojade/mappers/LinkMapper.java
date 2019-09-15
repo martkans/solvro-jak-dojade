@@ -20,11 +20,11 @@ public class LinkMapper {
         link.setDistance(linkDTO.getDistance());
 
         if(stopRepository.findById(linkDTO.getSource()).isPresent()){
-            link.setSource(stopRepository.findById(linkDTO.getSource()).get());
+            link.getStops().add(stopRepository.findById(linkDTO.getSource()).get());
         }
 
         if(stopRepository.findById(linkDTO.getTarget()).isPresent()){
-            link.setTarget(stopRepository.findById(linkDTO.getTarget()).get());
+            link.getStops().add(stopRepository.findById(linkDTO.getTarget()).get());
         }
 
         return link;

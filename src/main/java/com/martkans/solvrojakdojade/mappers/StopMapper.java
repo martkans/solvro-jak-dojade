@@ -11,8 +11,7 @@ public interface StopMapper {
 
     StopMapper INSTANCE = Mappers.getMapper(StopMapper.class);
 
-    @Mapping(target = "targetLinks", ignore = true)
-    @Mapping(target = "sourceLinks", ignore = true)
+    @Mapping(target = "links", ignore = true)
     Stop stopDtoToStop(StopDTO stopDTO);
 
     StopDTO stopToStopDto(Stop stop);
