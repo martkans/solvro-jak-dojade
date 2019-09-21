@@ -6,7 +6,11 @@ import lombok.Data;
 @Data
 public class DijkstraStopWrapper {
 
-    private Integer distance = 0;
+    private Integer distance = null;
     private Stop precursor = null;
     private Stop actualStop;
+
+    public DijkstraStopWrapper(Stop actualStop) {
+        this.actualStop = actualStop;
+    }
 }

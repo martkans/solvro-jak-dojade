@@ -19,7 +19,7 @@ public class Link {
     private Integer distance;
 
     @ManyToMany
-    @JoinTable(name = "link_stop", joinColumns = @JoinColumn(name = "stop_id"),
-            inverseJoinColumns = @JoinColumn(name = "link_id"))
+    @JoinTable(name = "link_stop", joinColumns = @JoinColumn(name = "link_id"),
+            inverseJoinColumns = @JoinColumn(name = "stop_id"))
     private Set<Stop> stops = new HashSet<>();
 }
