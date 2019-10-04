@@ -9,16 +9,22 @@ import com.martkans.solvrojakdojade.mappers.StopMapper;
 import com.martkans.solvrojakdojade.repositories.StopRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class StopServiceImpl implements StopService {
 
+    private static final int STARTING_DISTANCE = 0;
+
     private final StopRepository stopRepository;
     private final StopMapper stopMapper;
+
+    private Map<Integer, DijkstraStopWrapper> dijkstraStopWrappers = new HashMap<>();
+    private Map<Integer, Stop> stops = new HashMap<>();
 
     public StopServiceImpl(StopRepository stopRepository, StopMapper stopMapper) {
         this.stopRepository = stopRepository;
@@ -37,51 +43,50 @@ public class StopServiceImpl implements StopService {
     @Override
     public PathDTO findPath(Integer sourceId, Integer targetId) {
 
-        PathDTO pathDTO = new PathDTO();
-        List<DijkstraStopWrapper> dijkstraStopWrappers = new ArrayList<>();
-        List<Stop> stops = stopRepository.findAll();
-        DijkstraStopWrapper actualStopWrapper = null;
+        prepareDataForDijkstra(sourceId);
 
-        stops.forEach(stop -> dijkstraStopWrappers.add(new DijkstraStopWrapper(stop)));
+        runDijkstraAlgorithm();
 
-        dijkstraStopWrappers.get(getIndexInArrayWrapper(sourceId, dijkstraStopWrappers)).setDistance(0);
+        return buildPath(targetId);
+    }
+
+
+    private void prepareDataForDijkstra(Integer sourceId){
+
+        dijkstraStopWrappers.clear();
+        stops.clear();
+
+        stopRepository.findAll().forEach(stop -> stops.put(stop.getId(), stop));
+
+        stops.forEach((id, stop) -> dijkstraStopWrappers.put(id, new DijkstraStopWrapper(stop)));
+
+        dijkstraStopWrappers.get(sourceId).setDistance(STARTING_DISTANCE);
+    }
+
+    private void runDijkstraAlgorithm(){
 
         while (!stops.isEmpty()){
-            Optional<DijkstraStopWrapper> minDistStopOptional = dijkstraStopWrappers.stream()
-                    .filter(wrapper -> stops.contains(wrapper.getActualStop()))
-                    .min((d1, d2) -> {
-                        if (d1.getDistance() == null && d2.getDistance() == null){
-                            return 0;
-                        } else if (d1.getDistance() == null) {
-                            return 1;
-                        } else if (d2.getDistance() == null){
-                            return -1;
-                        } else if(d1.getDistance().equals(d2.getDistance())) {
-                            return 0;
-                        } else if (d1.getDistance() < d2.getDistance()) {
-                            return -1;
-                        } else {
-                            return 1;
-                        }
-                    });
+            Optional<DijkstraStopWrapper> minDistStopOptional = dijkstraStopWrappers.values().stream()
+                    .filter(wrapper -> stops.containsValue(wrapper.getActualStop()))
+                    .min(DijkstraStopWrapper::compareTo);
 
             if (minDistStopOptional.isPresent()){
-                    DijkstraStopWrapper minDistStop = minDistStopOptional.get();
+                DijkstraStopWrapper minDistStop = minDistStopOptional.get();
 
-                    stops.remove(getIndexInArrayStop(minDistStop.getActualStop().getId(), stops).intValue());
+                stops.remove(minDistStop.getActualStop().getId());
 
                 for (Link link : minDistStop.getActualStop().getLinks()) {
                     for (Stop stop : link.getStops()) {
-                        if(!stop.equals(minDistStop.getActualStop()) && stops.contains(stop)){
-                            int indexOfStop = getIndexInArrayWrapper(stop.getId(), dijkstraStopWrappers);
-                            if(dijkstraStopWrappers.get(indexOfStop).getDistance() == null ||
-                                    link.getDistance() + minDistStop.getDistance() <
-                                        dijkstraStopWrappers.get(indexOfStop).getDistance()){
+                        if(!stop.equals(minDistStop.getActualStop()) && stops.containsValue(stop)){
 
-                                dijkstraStopWrappers.get(indexOfStop)
+                            if(dijkstraStopWrappers.get(stop.getId()).getDistance() == null ||
+                                    link.getDistance() + minDistStop.getDistance() <
+                                            dijkstraStopWrappers.get(stop.getId()).getDistance()){
+
+                                dijkstraStopWrappers.get(stop.getId())
                                         .setDistance(link.getDistance() + minDistStop.getDistance());
 
-                                dijkstraStopWrappers.get(indexOfStop)
+                                dijkstraStopWrappers.get(stop.getId())
                                         .setPrecursor(minDistStop.getActualStop());
                             }
                         }
@@ -89,42 +94,31 @@ public class StopServiceImpl implements StopService {
                 }
             }
         }
+    }
+
+    private PathDTO buildPath(Integer targetId){
+
+        PathDTO pathDTO = new PathDTO();
+        DijkstraStopWrapper actualStopWrapper;
 
         pathDTO.setDistance(dijkstraStopWrappers
-                .get(getIndexInArrayWrapper(targetId, dijkstraStopWrappers)).getDistance());
+                .get(targetId).getDistance());
 
-        actualStopWrapper = dijkstraStopWrappers.get(
-                                    getIndexInArrayWrapper(targetId, dijkstraStopWrappers));
+        actualStopWrapper = dijkstraStopWrappers.get(targetId);
 
         do {
             pathDTO.getStops().add(0,
                     stopMapper.stopToStopRestDto(actualStopWrapper.getActualStop()));
 
             actualStopWrapper = dijkstraStopWrappers.get(
-                    getIndexInArrayWrapper(actualStopWrapper.getPrecursor().getId(), dijkstraStopWrappers));
+                    actualStopWrapper.getPrecursor().getId());
 
         } while (actualStopWrapper.getPrecursor() != null);
 
-        pathDTO.getStops().add(0, stopMapper.stopToStopRestDto(actualStopWrapper.getActualStop()));
+        pathDTO.getStops().add(0,
+                stopMapper.stopToStopRestDto(actualStopWrapper.getActualStop()));
 
         return pathDTO;
     }
 
-    private Integer getIndexInArrayWrapper(Integer id, List<DijkstraStopWrapper> dijkstraStopWrappers) {
-        for (int i = 0; i < dijkstraStopWrappers.size(); i++){
-            if (id.equals(dijkstraStopWrappers.get(i).getActualStop().getId()))
-                return i;
-        }
-
-        return -1;
-    }
-
-    private Integer getIndexInArrayStop(Integer id, List<Stop> stops) {
-        for (int i = 0; i < stops.size(); i++){
-            if (id.equals(stops.get(i).getId()))
-                return i;
-        }
-
-        return -1;
-    }
 }
