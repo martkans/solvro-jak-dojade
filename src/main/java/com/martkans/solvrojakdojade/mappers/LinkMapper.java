@@ -19,15 +19,8 @@ public class LinkMapper {
 
         link.setDistance(linkDTO.getDistance());
 
-        if(stopRepository.findById(linkDTO.getSource()).isPresent()){
-            link.getStops().add(stopRepository.findById(linkDTO.getSource()).get());
-        }
-        //exception handling
-
-        if(stopRepository.findById(linkDTO.getTarget()).isPresent()){
-            link.getStops().add(stopRepository.findById(linkDTO.getTarget()).get());
-        }
-        //exception handling
+        link.getStops().add(stopRepository.findById(linkDTO.getSource()).get());
+        link.getStops().add(stopRepository.findById(linkDTO.getTarget()).get());
 
         return link;
     }

@@ -5,6 +5,7 @@ import com.martkans.solvrojakdojade.DTOs.PathDTO;
 import com.martkans.solvrojakdojade.DTOs.StopRestDTO;
 import com.martkans.solvrojakdojade.domain.Link;
 import com.martkans.solvrojakdojade.domain.Stop;
+import com.martkans.solvrojakdojade.exceptions.ResourceNotFoundException;
 import com.martkans.solvrojakdojade.mappers.StopMapper;
 import com.martkans.solvrojakdojade.repositories.StopRepository;
 import org.springframework.stereotype.Service;
@@ -43,6 +44,8 @@ public class StopServiceImpl implements StopService {
     @Override
     public PathDTO findPath(Integer sourceId, Integer targetId) {
 
+        validData(sourceId, targetId);
+
         prepareDataForDijkstra(sourceId);
 
         runDijkstraAlgorithm();
@@ -50,8 +53,15 @@ public class StopServiceImpl implements StopService {
         return buildPath(targetId);
     }
 
+    private void validData (Integer sourceId, Integer targetId){
+        if(!stopRepository.findById(sourceId).isPresent())
+            throw new ResourceNotFoundException("Stop with id: " + sourceId + " does not exist.");
 
-    private void prepareDataForDijkstra(Integer sourceId){
+        if(!stopRepository.findById(targetId).isPresent())
+            throw new ResourceNotFoundException("Stop with id: " + targetId + " does not exist.");
+    }
+
+    private void prepareDataForDijkstra(Integer sourceId) {
 
         dijkstraStopWrappers.clear();
         stops.clear();
@@ -61,6 +71,7 @@ public class StopServiceImpl implements StopService {
         stops.forEach((id, stop) -> dijkstraStopWrappers.put(id, new DijkstraStopWrapper(stop)));
 
         dijkstraStopWrappers.get(sourceId).setDistance(STARTING_DISTANCE);
+
     }
 
     private void runDijkstraAlgorithm(){
