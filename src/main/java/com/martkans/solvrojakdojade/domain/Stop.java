@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,6 +17,8 @@ public class Stop {
 
     @Id
     private Integer id;
+
+    @NotNull
     private String stopName;
 
     @ManyToMany(mappedBy = "stops")
