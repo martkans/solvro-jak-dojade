@@ -23,4 +23,9 @@ public class Stop {
 
     @ManyToMany(mappedBy = "stops")
     private Set<Link> links = new HashSet<>();
+
+    public void addLink(Link link) {
+        links.add(link);
+        link.getStops().add(this);
+    }
 }
