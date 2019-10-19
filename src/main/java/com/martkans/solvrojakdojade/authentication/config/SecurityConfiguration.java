@@ -26,11 +26,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        http.csrf().disable();
         http.authorizeRequests()
                 .antMatchers("/h2-console/**").permitAll()
                 .anyRequest().authenticated()
                 .and().httpBasic()
-                .and().csrf().ignoringAntMatchers("/h2-console/**")
-                .and().headers().frameOptions().sameOrigin();
+                .and().headers().frameOptions().sameOrigin()
+                .and().logout()
+                    .permitAll()
+                    .logoutUrl("/logout")
+                    .invalidateHttpSession(true).deleteCookies("JSESSIONID");
     }
 }
