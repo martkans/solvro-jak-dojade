@@ -1,11 +1,11 @@
 package com.martkans.solvrojakdojade.restapp.services;
 
+import com.martkans.solvrojakdojade.exceptions.ResourceNotFoundException;
 import com.martkans.solvrojakdojade.restapp.DTOs.DijkstraStopWrapper;
 import com.martkans.solvrojakdojade.restapp.DTOs.PathDTO;
 import com.martkans.solvrojakdojade.restapp.DTOs.StopRestDTO;
 import com.martkans.solvrojakdojade.restapp.domain.Link;
 import com.martkans.solvrojakdojade.restapp.domain.Stop;
-import com.martkans.solvrojakdojade.restapp.exceptions.ResourceNotFoundException;
 import com.martkans.solvrojakdojade.restapp.mappers.StopMapper;
 import com.martkans.solvrojakdojade.restapp.repositories.StopRepository;
 import org.springframework.stereotype.Service;

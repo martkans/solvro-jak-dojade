@@ -72,9 +72,9 @@ public class DataLoader implements CommandLineRunner {
         }
 
         User user = new User();
-        user.setEmail("em");
-        user.setUsername("us");
-        user.setPassword("pass");
+        user.setEmail("email@google.com");
+        user.setUsername("user");
+        user.setPassword("password");
 
         Role role = new Role();
         role.setName("ADMIN");
@@ -83,6 +83,6 @@ public class DataLoader implements CommandLineRunner {
         roleRepository.save(role);
         userService.save(user);
 
-        log.debug("User loaded!");
+        log.debug("User saved!");
     }
 }

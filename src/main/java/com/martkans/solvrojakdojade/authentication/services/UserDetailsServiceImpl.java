@@ -2,6 +2,7 @@ package com.martkans.solvrojakdojade.authentication.services;
 
 import com.martkans.solvrojakdojade.authentication.domain.User;
 import com.martkans.solvrojakdojade.authentication.domain.UserDetailsImpl;
+import com.martkans.solvrojakdojade.authentication.repositories.RoleRepository;
 import com.martkans.solvrojakdojade.authentication.repositories.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -15,9 +16,11 @@ import java.util.Optional;
 public class UserDetailsServiceImpl implements UserDetailsService, UserService {
 
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
 
-    public UserDetailsServiceImpl(UserRepository userRepository) {
+    public UserDetailsServiceImpl(UserRepository userRepository, RoleRepository roleRepository) {
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
     }
 
     @Override
@@ -30,8 +33,19 @@ public class UserDetailsServiceImpl implements UserDetailsService, UserService {
     }
 
     @Override
-    public User save(User user) {
+    public void save(User user) {
+
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
-        return userRepository.save(user);
+        userRepository.save(user);
+    }
+
+    @Override
+    public Optional<User> findByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
+
+    @Override
+    public Optional<User> findByEmail(String email) {
+        return userRepository.findByEmail(email);
     }
 }
