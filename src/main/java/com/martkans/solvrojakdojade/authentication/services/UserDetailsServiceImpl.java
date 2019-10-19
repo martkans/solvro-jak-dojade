@@ -1,0 +1,37 @@
+package com.martkans.solvrojakdojade.authentication.services;
+
+import com.martkans.solvrojakdojade.authentication.domain.User;
+import com.martkans.solvrojakdojade.authentication.domain.UserDetailsImpl;
+import com.martkans.solvrojakdojade.authentication.repositories.UserRepository;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+
+@Service
+public class UserDetailsServiceImpl implements UserDetailsService, UserService {
+
+    private final UserRepository userRepository;
+
+    public UserDetailsServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Optional<User> optionalUser = userRepository.findByUsername(username);
+
+        if (optionalUser.isPresent()){
+            return new UserDetailsImpl(optionalUser.get());
+        } else throw new UsernameNotFoundException("Username not found!");
+    }
+
+    @Override
+    public User save(User user) {
+        user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+        return userRepository.save(user);
+    }
+}
