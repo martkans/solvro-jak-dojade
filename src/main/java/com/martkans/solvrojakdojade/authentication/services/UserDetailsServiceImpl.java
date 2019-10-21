@@ -2,7 +2,6 @@ package com.martkans.solvrojakdojade.authentication.services;
 
 import com.martkans.solvrojakdojade.authentication.domain.User;
 import com.martkans.solvrojakdojade.authentication.domain.UserDetailsImpl;
-import com.martkans.solvrojakdojade.authentication.repositories.RoleRepository;
 import com.martkans.solvrojakdojade.authentication.repositories.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -16,11 +15,9 @@ import java.util.Optional;
 public class UserDetailsServiceImpl implements UserDetailsService, UserService {
 
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
 
-    public UserDetailsServiceImpl(UserRepository userRepository, RoleRepository roleRepository) {
+    public UserDetailsServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
     }
 
     @Override

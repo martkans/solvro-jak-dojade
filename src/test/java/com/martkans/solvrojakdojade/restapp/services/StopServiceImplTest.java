@@ -23,6 +23,8 @@ import static org.mockito.Mockito.*;
 
 public class StopServiceImplTest {
 
+    private static final int WANTED_NUMBER_OF_INVOCATIONS = 1;
+
     @Mock
     private StopRepository stopRepository;
 
@@ -54,7 +56,7 @@ public class StopServiceImplTest {
 
         assertEquals(stops.size(), stopDTOS.size());
 
-        verify(stopRepository, times(1)).findAll();
+        verify(stopRepository, times(WANTED_NUMBER_OF_INVOCATIONS)).findAll();
     }
 
     @Test(expected = ResourceNotFoundException.class)

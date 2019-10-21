@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class UserController {
 
+    private static final int MIN_LENGTH = 6;
+    private static final int MAX_LENGTH = 32;
     private final UserService userService;
 
     public UserController(UserService userService) {
@@ -25,12 +27,12 @@ public class UserController {
         if (userService.findByUsername(user.getUsername()).isPresent())
             throw new BadRequestException("Username exists: " + user.getUsername());
 
-        if (user.getUsername().length() < 6 || user.getUsername().length() > 32)
-            throw new BadRequestException("Username must have between 6 and 32 characters: "
+        if (user.getUsername().length() < MIN_LENGTH || user.getUsername().length() > MAX_LENGTH)
+            throw new BadRequestException("Username must have between " + MIN_LENGTH + " and " + MAX_LENGTH + "characters: "
                     + user.getUsername());
 
-        if (user.getPassword().length() < 6 || user.getPassword().length() > 32)
-            throw new BadRequestException("Password must have between 6 and 32 characters");
+        if (user.getPassword().length() < MIN_LENGTH || user.getPassword().length() > MAX_LENGTH)
+            throw new BadRequestException("Password must have between " + MIN_LENGTH + " and " + MAX_LENGTH + " characters");
 
         if (userService.findByEmail(user.getEmail()).isPresent())
             throw new BadRequestException("Email used: " + user.getEmail());
