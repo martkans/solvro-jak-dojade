@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/solvro-db
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: verySafePassword
+  jpa:
+    hibernate:
+#      ddl-auto: create
+      ddl-auto: validate
+    database: mysql
+    show-sql: false
