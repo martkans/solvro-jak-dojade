@@ -40,7 +40,8 @@ public class StopController {
             @ApiImplicitParam(name = "target", required = true, value = "Stop where the path ends", dataType = "string", paramType = "query")
     })
     @ApiResponses({
-            @ApiResponse(code = 200, message = "JSON containing stops and total distance.")
+            @ApiResponse(code = 200, message = "JSON containing stops and total distance."),
+            @ApiResponse(code = 404, message = "One of stops not found.")
     })
     public PathDTO getPathBetweenStops(@RequestParam String source, @RequestParam String target){
         return stopService.findPath(Integer.valueOf(source), Integer.valueOf(target));

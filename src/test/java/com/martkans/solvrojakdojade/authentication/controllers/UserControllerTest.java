@@ -28,7 +28,7 @@ public class UserControllerTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        UserController userController = new UserController(userService);
+        UserController userController = new UserController(userService, userMapper);
 
         mockMvc = MockMvcBuilders
                 .standaloneSetup(userController)
