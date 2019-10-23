@@ -1,5 +1,6 @@
 package com.martkans.solvrojakdojade.authentication.controllers;
 
+import com.martkans.solvrojakdojade.authentication.mappers.UserMapper;
 import com.martkans.solvrojakdojade.authentication.services.UserService;
 import com.martkans.solvrojakdojade.exceptions.RestResponseEntityExceptionHandler;
 import org.junit.Before;
@@ -21,6 +22,9 @@ public class UserControllerTest {
 
     @Mock
     private UserService userService;
+
+    @Mock
+    private UserMapper userMapper;
 
     private MockMvc mockMvc;
 
