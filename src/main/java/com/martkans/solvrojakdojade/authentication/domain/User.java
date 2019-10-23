@@ -1,15 +1,14 @@
 package com.martkans.solvrojakdojade.authentication.domain;
 
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
-import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 @Entity
 @Data
-@EqualsAndHashCode(exclude = {"roles"})
 public class User {
 
     @Id
@@ -20,23 +19,12 @@ public class User {
     private String password;
     private String email;
 
-    @ManyToMany
-    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"),
-        inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles = new HashSet<>();
-
     public User(){}
 
     User(User user) {
         this.email = user.email;
         this.username = user.username;
         this.password = user.password;
-        this.roles = user.roles;
         this.id = user.id;
-    }
-
-    public void addRole(Role role) {
-        this.getRoles().add(role);
-        role.getUsers().add(this);
     }
 }

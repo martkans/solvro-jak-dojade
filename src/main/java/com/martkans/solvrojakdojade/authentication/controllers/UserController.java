@@ -3,6 +3,8 @@ package com.martkans.solvrojakdojade.authentication.controllers;
 import com.martkans.solvrojakdojade.authentication.domain.User;
 import com.martkans.solvrojakdojade.authentication.services.UserService;
 import com.martkans.solvrojakdojade.exceptions.BadRequestException;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@Api
 public class UserController {
 
     private static final int MIN_LENGTH = 6;
@@ -22,6 +25,7 @@ public class UserController {
 
     @PostMapping("/registration")
     @ResponseStatus(HttpStatus.CREATED)
+    @ApiOperation(value = "Saves new user to database")
     public String registration(@RequestBody User user){
 
         if (userService.findByUsername(user.getUsername()).isPresent())
