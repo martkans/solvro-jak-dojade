@@ -33,10 +33,7 @@ a także automatycznie wygenerowana komenda _curl_ nie działa. Aby zadziałała
 ```shell script
 curl -X GET "http://localhost:8080/stops" -H  "accept: */*" --user <your_username>:<your_password>
 ```
-Autentykacja odbywa się na podstawie ciasteczek. Ciasteczko można skasować poprzez:
-```shell script
-curl -X GET "http://localhost:8080/logout" -H  "accept: */*"
-```
+
 Po skończonej pracy kontener ten można zatrzymać za pomocą komendy:
 ```shell script
 docker stop solvro-jak-dojade
