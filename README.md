@@ -1,6 +1,6 @@
-#Solvro Jak Dojade - Backend
+# Solvro Jak Dojade - Backend
 
-###Solvro Jak Dojade jest backendem do aplikacji imitującej działanie JakDojade na potrzeby rekrutacji do Koła Naukowego Solvro
+### Solvro Jak Dojade jest backendem do aplikacji imitującej działanie JakDojade na potrzeby rekrutacji do Koła Naukowego Solvro
 
 Backend został napisany w frameworku Spring. 
 Aby można było łatwo odpalić aplikację na każdym systemie operacyjnym należy zainstalować Dockera oraz Gradle, 
